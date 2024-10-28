@@ -1,4 +1,7 @@
-export class UpdatePatchAnimalDto {
-  food: string
-  amount: number
+export class UpdateAnimalDto {
+  name?: string
+  habitat?: string
+  food?: string
+  zone?: string
+  amount?: number
 }

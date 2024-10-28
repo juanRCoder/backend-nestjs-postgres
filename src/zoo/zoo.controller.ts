@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Param, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, Put, Delete, Inject } from '@nestjs/common';
 import { ZooService } from './zoo.service';
 import { AddAnimalDto } from './dto/add-animal.dto';
-import { UpdatePatchAnimalDto } from './dto/update-animal.dto';
+import { UpdateAnimalDto } from './dto/update-animal.dto';
 
 @Controller('zoo/animals')
 export class ZooController {
@@ -23,15 +23,15 @@ export class ZooController {
   }
 
   @Patch(':id')
-  updateAnimal(
-    @Param('id') id: number,
-    @Body() dataAnimal: UpdatePatchAnimalDto,
+  updatePropertiesAnimal(
+    @Param('id') id: string,
+    @Body() dataAnimal: UpdateAnimalDto,
   ) {
-    return this.zooService.updateDataAnimal(Number(id), dataAnimal);
+    return this.zooService.updateAnimal(Number(id), dataAnimal);
   }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.zooService.remove(+id);
-  // }
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.zooService.deleteAnimal(Number(id))
+  }
 }
