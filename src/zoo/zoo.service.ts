@@ -23,7 +23,7 @@ export class ZooService {
     try {
       return await this.prisma.zoo.findMany();
     } catch(e) {
-      throw new Error(`Error al obtener la lista de animales: ${e.message}`)
+      throw new InternalServerErrorException(`Error al obtener todos los datos: ${e.message}`)
     }
   }
 
@@ -32,7 +32,7 @@ export class ZooService {
     const findAnimal = await this.findingAnimal(id, 'seleccionar')
     return {message: 'Animal seleccionado', data: findAnimal}
     } catch(e) {
-      throw new Error(`Error al seleccionar un animal: ${e}`)
+      throw new InternalServerErrorException(`Error en la solicitud: ${e.message}`)
     }
   }
 
@@ -41,7 +41,7 @@ export class ZooService {
     const addedAnimal = await this.prisma.zoo.create({data: animal})
     return {message: 'Animal agregado', data: addedAnimal}
     } catch(e) {
-      throw new InternalServerErrorException(`Error al agregar un nuevo animal: ${e.message}`)
+      throw new InternalServerErrorException(`Error en la solicitud: ${e.message}`)
     }
   }
 
@@ -54,7 +54,7 @@ export class ZooService {
       })
       return {message: 'Animal actualizado', data: updatedAnimal}
     } catch(e) {
-      throw new InternalServerErrorException(`Error al actualizar el animal: ${e.message}`)
+      throw new InternalServerErrorException(`Error en la solicitud: ${e.message}`)
     }
   }
 
@@ -66,7 +66,7 @@ export class ZooService {
       })
       return {message: 'Animal eliminado', data: deletedAnimal}
     } catch(e) {
-      throw new InternalServerErrorException(`Error al eliminar el animal: ${e.message}`)
+      throw new InternalServerErrorException(`Error en la solicitud: ${e.message}`)
     }
   }
 }
