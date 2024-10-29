@@ -7,9 +7,9 @@ services:
     environment:
       POSTGRES_USER: ${USER}
       POSTGRES_PASSWORD: ${PASSWORD}
-      POSTGRES_DB: ${DB}
+      POSTGRES_DB: nestdb
     ports:
-      - ${PORT_DB}:5432
+      - 5432:5432
     volumes:
       - postgresdb-data:/var/lib/postgresql/data
 
