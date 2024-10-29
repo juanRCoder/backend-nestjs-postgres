@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { AddAnimalDto } from './dto/add-animal.dto';
 import { UpdateAnimalDto } from './dto/update-animal.dto';
 import { PrismaService } from 'src/prisma.service';
@@ -6,67 +6,67 @@ import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class ZooService {
-  // private zoo = [
-  //   {
-  //     id: 1,
-  //     name: 'monkey',
-  //     habitat: 'jungle',
-  //     food: 'banana',
-  //     zone: 'A02',
-  //     amount: 12,
-  //   },
-  //   {
-  //     id: 2,
-  //     name: 'tiger',
-  //     habitat: 'meado',
-  //     food: 'banana',
-  //     zone: 'A05',
-  //     amount: 3,
-  //   },
-  // ];
 
   constructor(private prisma: PrismaService) {}
 
-  getZoo() {
-    return this.prisma.zoo.findMany();
-    // return this.zoo;
-  }
-
-  getOneAnimal(id: number) {
-    return this.prisma.zoo.findUnique({
+  private async findingAnimal(id: number, message: string) {
+    const findedAnimal = await this.prisma.zoo.findUnique({
       where: {id}
     })
-    // const findedAnimal = this.zoo.find((animal) => animal.id === id);
-    // if (!findedAnimal) throw new NotFoundException('Animal no encontrado!')
-    // return findedAnimal
+    if (!findedAnimal) {
+      throw new NotFoundException(`Animal no encontrado para ${message}!`);
+    }
+    return findedAnimal;
   }
 
-  addAnimal(animal: AddAnimalDto) {
-    return this.prisma.zoo.create({data: animal})
-    // this.zoo.push({ ...animal, id: this.zoo.length + 1 });
-    // return {message: 'Animal agregado!', data: animal};
+  public async getZoo() {
+    try {
+      return await this.prisma.zoo.findMany();
+    } catch(e) {
+      throw new Error(`Error al obtener la lista de animales: ${e.message}`)
+    }
   }
 
-  updateAnimal(id: number, updatedData: UpdateAnimalDto) {
-    return this.prisma.zoo.update({
-      where: {id},
-      data: updatedData
-    })
-    // const findedAnimal = this.zoo.find((animal) => animal.id === id);
-    // if (!findedAnimal) throw new NotFoundException('Animal no encontrado para actualizar!');
-    // Object.assign(findedAnimal, updatedData)
-
-    // return {message: 'Animal Actualizado!', data: updatedData};
+  public async getOneAnimal(id: number) {
+    try {
+    const findAnimal = await this.findingAnimal(id, 'seleccionar')
+    return {message: 'Animal seleccionado', data: findAnimal}
+    } catch(e) {
+      throw new Error(`Error al seleccionar un animal: ${e}`)
+    }
   }
 
-  deleteAnimal(id: number) {
-    return this.prisma.zoo.delete({
-      where: {id}
-    })
-    // const removeAnimal = this.zoo.findIndex((animal) => animal.id === id);
-    // if (removeAnimal === -1) throw new NotFoundException('Animal no encontrado para eliminar!');
-    // const findedAnimal = this.zoo.find(animal => animal.id === id);
-    // this.zoo.splice(removeAnimal, 1)
-    // return {message: 'Animal Eliminado!', data: findedAnimal}
+  public async addAnimal(animal: AddAnimalDto) {
+    try {
+    const addedAnimal = await this.prisma.zoo.create({data: animal})
+    return {message: 'Animal agregado', data: addedAnimal}
+    } catch(e) {
+      throw new InternalServerErrorException(`Error al agregar un nuevo animal: ${e.message}`)
+    }
+  }
+
+  public async updateAnimal(id: number, updatedData: UpdateAnimalDto) {
+    try {
+      await this.findingAnimal(id, 'actualizar') 
+      const updatedAnimal = await this.prisma.zoo.update({
+        where: {id},
+        data: updatedData
+      })
+      return {message: 'Animal actualizado', data: updatedAnimal}
+    } catch(e) {
+      throw new InternalServerErrorException(`Error al actualizar el animal: ${e.message}`)
+    }
+  }
+
+  public async  deleteAnimal(id: number) {
+    try {
+      await this.findingAnimal(id, 'eliminar')
+      const deletedAnimal = await this.prisma.zoo.delete({
+        where: {id}
+      })
+      return {message: 'Animal eliminado', data: deletedAnimal}
+    } catch(e) {
+      throw new InternalServerErrorException(`Error al eliminar el animal: ${e.message}`)
+    }
   }
 }
