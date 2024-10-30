@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: ${PASSWORD}
       POSTGRES_DB: nestdb
     ports:
-      - 5432:5432
+      - 5464:5432
     volumes:
       - postgresdb-data:/var/lib/postgresql/data
 
