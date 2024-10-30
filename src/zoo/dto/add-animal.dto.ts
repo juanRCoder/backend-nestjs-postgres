@@ -22,7 +22,7 @@ export const exampleGET = {
   name: "monkey",
   habitat: "jungle",
   food: "fruits",
-  zone: "zone-A", 
+  zone: "zone-B", 
   amount: 10,
   createAt: "2024-10-29T23:03:36.656Z",
   updateAt: "2024-10-29T23:03:36.656Z"
