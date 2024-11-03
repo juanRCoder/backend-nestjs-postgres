@@ -13,7 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model Zoo {
   id        Int @default(autoincrement()) @id
   name      String
