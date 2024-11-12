@@ -6,7 +6,7 @@
 
 # Backend Node(Nestjs) + DB(Postgres)
 ## Description
-Este proyecto es una prueba de lanzamiento del servidor node y su framework nestjs a produccion junto a una base de datos postgres todo en el servicio de Render.
+Este proyecto es una prueba de lanzamiento del servidor node y su framework nestjs a produccion junto a una base de datos postgres todo en el servicio de Render
 ### OJO:
 Debido al plan gratuito que ofrece render, al entrar al link demorara unos minutos.
 Esto es debido a que render suspende el servidor despues de 15 minutos de inactividad, por ello apaga el servidor hasta que alguien u otra persona use el servicio.
